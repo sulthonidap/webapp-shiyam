@@ -64,7 +64,7 @@ export const LandingPage: React.FC = () => {
             <div className="flex items-center">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/src/image/no-bg.png" 
+                  src="/no-bg.png" 
                   alt="Shiyam Logo" 
                   className="w-full h-full object-contain"
                 />
@@ -203,7 +203,7 @@ export const LandingPage: React.FC = () => {
             <div className="flex items-center justify-center mb-6">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/src/image/no-bg.png" 
+                  src="/no-bg.png" 
                   alt="Shiyam Logo" 
                   className="w-full h-full object-contain"
                 />

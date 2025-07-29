@@ -48,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
             <div className="flex-shrink-0">
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/src/image/no-bg.png" 
+                  src="/no-bg.png" 
                   alt="Shiyam Logo" 
                   className="w-full h-full object-contain"
                 />

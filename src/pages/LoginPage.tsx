@@ -65,7 +65,7 @@ export const LoginPage: React.FC = () => {
         <div className="text-center">
           <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl mx-auto mb-4 sm:mb-6 flex items-center justify-center overflow-hidden">
             <img 
-              src="/src/image/no-bg.png" 
+              src="/no-bg.png" 
               alt="Shiyam Logo" 
               className="w-full h-full object-contain"
             />
