@@ -60,22 +60,26 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6 sm:space-y-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-blue-600 rounded-xl mx-auto mb-6 flex items-center justify-center">
-            <span className="text-white font-bold text-xl">HM</span>
+          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl mx-auto mb-4 sm:mb-6 flex items-center justify-center overflow-hidden">
+            <img 
+              src="/src/image/no-bg.png" 
+              alt="Shiyam Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Admin Login
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             Sign in to access the Shiyam management system
           </p>
         </div>
 
-        <div className="bg-white shadow-xl rounded-2xl p-8">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="bg-white shadow-xl rounded-2xl p-6 sm:p-8">
+          <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
@@ -87,9 +91,9 @@ export const LoginPage: React.FC = () => {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`appearance-none relative block w-full px-3 py-3 border ${
+                className={`appearance-none relative block w-full px-3 py-2 sm:py-3 border ${
                   errors.email ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-sm sm:text-base`}
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -108,9 +112,9 @@ export const LoginPage: React.FC = () => {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`appearance-none relative block w-full px-3 py-3 border ${
+                className={`appearance-none relative block w-full px-3 py-2 sm:py-3 border ${
                   errors.password ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-sm sm:text-base`}
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -130,9 +134,9 @@ export const LoginPage: React.FC = () => {
             </div>
           </form>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h4 className="text-sm font-medium text-blue-900 mb-2">Demo Credentials:</h4>
-            <p className="text-sm text-blue-700">
+          <div className="mt-6 p-3 sm:p-4 bg-blue-50 rounded-lg">
+            <h4 className="text-xs sm:text-sm font-medium text-blue-900 mb-2">Demo Credentials:</h4>
+            <p className="text-xs sm:text-sm text-blue-700">
               <strong>Email:</strong> admin@Shiyam.com<br />
               <strong>Password:</strong> admin123
             </p>

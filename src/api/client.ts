@@ -19,9 +19,42 @@ export const mockData = {
     { id: '5', name: 'Dr. Emily Davis', email: 'emily@Shiyam.com', role: 'staff', telephone: '+1-555-0105', address: '654 Medical Center', createdAt: '2024-01-19T12:00:00Z' },
   ],
   examinations: [
-    { id: '1', patientId: '3', patientName: 'Alice Johnson', staffId: '2', staffName: 'Nurse Sarah Wilson', date: '2024-01-20', notes: 'Regular checkup - all vitals normal', status: 'completed', createdAt: '2024-01-20T14:00:00Z' },
-    { id: '2', patientId: '4', patientName: 'Bob Brown', staffId: '5', staffName: 'Dr. Emily Davis', date: '2024-01-21', notes: 'Follow-up examination for blood pressure', status: 'completed', createdAt: '2024-01-21T15:00:00Z' },
-    { id: '3', patientId: '3', patientName: 'Alice Johnson', staffId: '5', staffName: 'Dr. Emily Davis', date: '2024-01-22', notes: 'Scheduled for routine examination', status: 'scheduled', createdAt: '2024-01-22T16:00:00Z' },
+    { 
+      id: '1', 
+      tanggal: '2024-01-20', 
+      skor: 85, 
+      usia: 35, 
+      jenis_kelamin: 'Perempuan', 
+      alamat: '789 Patient Rd', 
+      lama_sakit: 'Regular checkup - all vitals normal', 
+      createdAt: '2024-01-20T14:00:00Z',
+      updatedAt: '2024-01-20T14:00:00Z',
+      pasien: { id: 3, name: 'Alice Johnson', email: 'alice@patient.com' }
+    },
+    { 
+      id: '2', 
+      tanggal: '2024-01-21', 
+      skor: 78, 
+      usia: 42, 
+      jenis_kelamin: 'Laki-laki', 
+      alamat: '321 Health Blvd', 
+      lama_sakit: 'Follow-up examination for blood pressure', 
+      createdAt: '2024-01-21T15:00:00Z',
+      updatedAt: '2024-01-21T15:00:00Z',
+      pasien: { id: 4, name: 'Bob Brown', email: 'bob@patient.com' }
+    },
+    { 
+      id: '3', 
+      tanggal: '2024-01-22', 
+      skor: 92, 
+      usia: 35, 
+      jenis_kelamin: 'Perempuan', 
+      alamat: '789 Patient Rd', 
+      lama_sakit: 'Scheduled for routine examination', 
+      createdAt: '2024-01-22T16:00:00Z',
+      updatedAt: '2024-01-22T16:00:00Z',
+      pasien: { id: 3, name: 'Alice Johnson', email: 'alice@patient.com' }
+    },
   ],
   staffAssignments: [
     { id: '1', staffId: '2', patientId: '3', staffName: 'Nurse Sarah Wilson', patientName: 'Alice Johnson', assignedAt: '2024-01-15T08:00:00Z' },

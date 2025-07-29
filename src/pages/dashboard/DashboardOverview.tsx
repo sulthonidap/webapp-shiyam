@@ -20,51 +20,161 @@ import {
   Bar, 
   ResponsiveContainer 
 } from 'recharts';
-import { dashboardService } from '../../api/services';
+import { userService, examinationService } from '../../api/services';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 
+// Skeleton Components
+const StatCardSkeleton: React.FC = () => (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-pulse">
+    <div className="flex items-center justify-between">
+      <div className="flex-1">
+        <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+        <div className="h-8 bg-gray-200 rounded w-16 mb-2"></div>
+        <div className="flex items-center">
+          <div className="h-3 bg-gray-200 rounded w-12 mr-2"></div>
+          <div className="h-3 bg-gray-200 rounded w-20"></div>
+        </div>
+      </div>
+      <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+    </div>
+  </div>
+);
+
+const ChartSkeleton: React.FC = () => (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-pulse">
+    <div className="h-6 bg-gray-200 rounded w-48 mb-6"></div>
+    <div className="h-[300px] bg-gray-200 rounded"></div>
+  </div>
+);
+
+const DashboardSkeleton: React.FC = () => (
+  <div className="space-y-8">
+    <div>
+      <div className="h-8 bg-gray-200 rounded w-64 mb-2"></div>
+      <div className="h-4 bg-gray-200 rounded w-80"></div>
+    </div>
+
+    {/* Stats Cards Skeleton */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {[...Array(4)].map((_, index) => (
+        <StatCardSkeleton key={index} />
+      ))}
+    </div>
+
+    {/* Charts Skeleton */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <ChartSkeleton />
+      <ChartSkeleton />
+      <div className="lg:col-span-2">
+        <ChartSkeleton />
+      </div>
+    </div>
+  </div>
+);
+
 export const DashboardOverview: React.FC = () => {
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['dashboard-stats'],
-    queryFn: dashboardService.getDashboardStats,
+  // Menggunakan query yang sudah ada dari halaman lain
+  const { data: users = [], isLoading: usersLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => userService.getUsers(),
   });
 
-  // Mock chart data
-  const examinationTrends = [
-    { name: 'Jan', examinations: 65 },
-    { name: 'Feb', examinations: 59 },
-    { name: 'Mar', examinations: 80 },
-    { name: 'Apr', examinations: 81 },
-    { name: 'May', examinations: 56 },
-    { name: 'Jun', examinations: 55 },
-    { name: 'Jul', examinations: 40 },
-  ];
+  const { data: examinations = [], isLoading: examinationsLoading } = useQuery({
+    queryKey: ['examinations'],
+    queryFn: examinationService.getExaminations,
+  });
+
+  const isLoading = usersLoading || examinationsLoading;
+
+  // Hitung statistik dari data yang sudah ada
+  const today = new Date().toISOString().split('T')[0];
+  const todayExaminations = examinations.filter(exam => {
+    const examDate = new Date(exam.createdAt).toISOString().split('T')[0];
+    return examDate === today;
+  });
+  
+  const stats = {
+    totalUsers: users.length,
+    totalExaminations: examinations.length,
+    activeStaff: users.filter(u => u.role === 'staff').length,
+    todayExaminations: todayExaminations.length,
+    adminCount: users.filter(u => u.role === 'admin').length,
+    staffCount: users.filter(u => u.role === 'staff').length,
+    patientCount: users.filter(u => u.role === 'patient').length,
+  };
+
+  // Generate examination trends dari data real (7 hari terakhir)
+  const generateExaminationTrends = () => {
+    const trends = [];
+    const today = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      const count = examinations.filter(exam => {
+        const examDate = new Date(exam.createdAt).toISOString().split('T')[0];
+        return examDate === dateStr;
+      }).length;
+      
+      trends.push({
+        name: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        examinations: count
+      });
+    }
+    
+    return trends;
+  };
+
+  // Generate monthly stats dari data real (4 minggu terakhir)
+  const generateMonthlyStats = () => {
+    const stats = [];
+    const today = new Date();
+    
+    for (let i = 3; i >= 0; i--) {
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - (i * 7));
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      
+      const weekExaminations = examinations.filter(exam => {
+        const examDate = new Date(exam.createdAt);
+        return examDate >= weekStart && examDate <= weekEnd;
+      }).length;
+      
+      const weekUsers = users.filter(user => {
+        const userDate = new Date(user.createdAt);
+        return userDate >= weekStart && userDate <= weekEnd;
+      }).length;
+      
+      stats.push({
+        name: `Week ${4-i}`,
+        examinations: weekExaminations,
+        users: weekUsers
+      });
+    }
+    
+    return stats;
+  };
 
   const userDistribution = [
-    { name: 'Patients', value: stats?.patientCount || 0, color: '#3B82F6' },
-    { name: 'Staff', value: stats?.staffCount || 0, color: '#10B981' },
-    { name: 'Admins', value: stats?.adminCount || 0, color: '#F59E0B' },
+    { name: 'Patients', value: stats.patientCount, color: '#3B82F6' },
+    { name: 'Staff', value: stats.staffCount, color: '#10B981' },
+    { name: 'Admins', value: stats.adminCount, color: '#F59E0B' },
   ];
 
-  const monthlyStats = [
-    { name: 'Week 1', examinations: 20, users: 5 },
-    { name: 'Week 2', examinations: 35, users: 8 },
-    { name: 'Week 3', examinations: 28, users: 12 },
-    { name: 'Week 4', examinations: 42, users: 15 },
-  ];
+  const examinationTrends = generateExaminationTrends();
+  const monthlyStats = generateMonthlyStats();
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   const statCards = [
     {
       title: 'Total Users',
-      value: stats?.totalUsers || 0,
+      value: stats.totalUsers,
       icon: UsersIcon,
       color: 'bg-blue-500',
       change: '+12%',
@@ -72,7 +182,7 @@ export const DashboardOverview: React.FC = () => {
     },
     {
       title: 'Total Examinations',
-      value: stats?.totalExaminations || 0,
+      value: stats.totalExaminations,
       icon: ClipboardDocumentCheckIcon,
       color: 'bg-green-500',
       change: '+8%',
@@ -80,7 +190,7 @@ export const DashboardOverview: React.FC = () => {
     },
     {
       title: 'Active Staff',
-      value: stats?.activeStaff || 0,
+      value: stats.activeStaff,
       icon: UserGroupIcon,
       color: 'bg-purple-500',
       change: '+2%',
@@ -88,7 +198,7 @@ export const DashboardOverview: React.FC = () => {
     },
     {
       title: 'Today\'s Examinations',
-      value: stats?.todayExaminations || 0,
+      value: stats.todayExaminations,
       icon: CalendarDaysIcon,
       color: 'bg-orange-500',
       change: '-3%',
@@ -98,30 +208,37 @@ export const DashboardOverview: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {/* Loading Indicator */}
+      {isLoading && (
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <div className="h-1 bg-blue-500 animate-pulse"></div>
+        </div>
+      )}
+      
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
         <p className="text-gray-600 mt-2">Welcome to your Shiyam management dashboard</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+          <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
-                <div className="flex items-center mt-2">
-                  <span className={`text-sm font-medium ${
+                <p className="text-xs sm:text-sm font-medium text-gray-600">{stat.title}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{stat.value}</p>
+                <div className="flex items-center mt-1 sm:mt-2">
+                  <span className={`text-xs sm:text-sm font-medium ${
                     stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
                   }`}>
                     {stat.change}
                   </span>
-                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                  <span className="text-xs sm:text-sm text-gray-500 ml-1">vs last month</span>
                 </div>
               </div>
-              <div className={`${stat.color} p-3 rounded-lg`}>
-                <stat.icon className="h-6 w-6 text-white" />
+              <div className={`${stat.color} p-2 sm:p-3 rounded-lg`}>
+                <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
             </div>
           </div>
@@ -129,11 +246,11 @@ export const DashboardOverview: React.FC = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Examination Trends */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Examination Trends</h3>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Examination Trends (7 Days)</h3>
+          <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <LineChart data={examinationTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="name" stroke="#6b7280" />
@@ -157,17 +274,18 @@ export const DashboardOverview: React.FC = () => {
         </div>
 
         {/* User Distribution */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">User Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">User Distribution</h3>
+          <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <PieChart>
               <Pie
                 data={userDistribution}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
+                label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
+                outerRadius={80}
+                className="sm:outerRadius={100}"
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -181,9 +299,9 @@ export const DashboardOverview: React.FC = () => {
         </div>
 
         {/* Monthly Statistics */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:col-span-2">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Monthly Statistics</h3>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 lg:col-span-2">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Weekly Statistics (4 Weeks)</h3>
+          <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <BarChart data={monthlyStats}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="name" stroke="#6b7280" />
@@ -203,7 +321,7 @@ export const DashboardOverview: React.FC = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
@@ -222,7 +340,7 @@ export const DashboardOverview: React.FC = () => {
             <p className="text-sm text-gray-600">View staff assignments</p>
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

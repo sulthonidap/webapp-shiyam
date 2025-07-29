@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
+import * as XLSX from 'xlsx';
 
 import { userService } from '../../api/services';
 import { User } from '../../types';
@@ -132,6 +133,54 @@ export const UserManagement: React.FC = () => {
     }
   };
 
+  const exportUsersToExcel = () => {
+    try {
+      // Prepare data for export
+      const exportData = filteredUsers.map(user => ({
+        'ID': user.id,
+        'Nama': user.name,
+        'Email': user.email,
+        'Role': user.role === 'admin' ? 'Admin' : 
+                user.role === 'staff' ? 'Staff' : 
+                user.role === 'patient' ? 'Patient' : user.role,
+        'Telepon': user.telephone || 'N/A',
+        'Alamat': user.address || 'N/A',
+        'Created At': new Date(user.createdAt).toLocaleString(),
+      }));
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(exportData);
+
+      // Set column widths
+      const colWidths = [
+        { wch: 10 }, // ID
+        { wch: 25 }, // Nama
+        { wch: 30 }, // Email
+        { wch: 12 }, // Role
+        { wch: 15 }, // Telepon
+        { wch: 40 }, // Alamat
+        { wch: 20 }, // Created At
+      ];
+      ws['!cols'] = colWidths;
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, 'Users');
+
+      // Generate filename with current date
+      const today = new Date().toISOString().split('T')[0];
+      const filename = `users_${today}.xlsx`;
+
+      // Save file
+      XLSX.writeFile(wb, filename);
+      
+      toast.success('User data exported successfully!');
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      toast.error('Failed to export data');
+    }
+  };
+
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'admin': return 'bg-red-100 text-red-800';
@@ -156,10 +205,19 @@ export const UserManagement: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
           <p className="text-gray-600 mt-2">Manage all system users and their roles</p>
         </div>
-        <Button onClick={() => handleOpenModal()} className="mt-4 sm:mt-0">
-          <PlusIcon className="h-5 w-5 mr-2" />
-          Add User
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
+          <Button 
+            onClick={exportUsersToExcel} 
+            className="flex items-center bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700"
+          >
+            <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
+            Export to Excel
+          </Button>
+          {/* <Button onClick={() => handleOpenModal()}>
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Add User
+          </Button> */}
+        </div>
       </div>
 
       {/* Filters */}
@@ -194,19 +252,19 @@ export const UserManagement: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   User
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Contact
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Created
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -214,27 +272,27 @@ export const UserManagement: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{user.name}</div>
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     <div>
                       {user.telephone && <div>{user.telephone}</div>}
                       {user.address && <div className="text-gray-500">{user.address}</div>}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
                       <button
                         onClick={() => handleOpenModal(user)}
@@ -259,8 +317,8 @@ export const UserManagement: React.FC = () => {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+              <div className="text-sm text-gray-700 text-center sm:text-left">
                 Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of {filteredUsers.length} results
               </div>
               <div className="flex space-x-2">
@@ -272,6 +330,9 @@ export const UserManagement: React.FC = () => {
                 >
                   Previous
                 </Button>
+                <span className="flex items-center px-3 py-2 text-sm text-gray-700">
+                  Page {currentPage} of {totalPages}
+                </span>
                 <Button
                   variant="outline"
                   size="sm"

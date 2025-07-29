@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, PencilIcon, TrashIcon, MagnifyingGlassIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
+import * as XLSX from 'xlsx';
 
 import { examinationService, userService } from '../../api/services';
 import { Examination } from '../../types';
@@ -148,6 +149,69 @@ export const ExaminationManagement: React.FC = () => {
     }
   };
 
+  const formatJenisKelamin = (jenisKelamin: string) => {
+    switch (jenisKelamin.toLowerCase()) {
+      case 'male':
+      case 'laki-laki':
+        return 'Laki-laki';
+      case 'female':
+      case 'perempuan':
+        return 'Perempuan';
+      default:
+        return jenisKelamin;
+    }
+  };
+
+  const exportToExcel = () => {
+    try {
+      // Prepare data for export
+      const exportData = filteredExaminations.map(examination => ({
+        'ID': examination.id,
+        'Nama Pasien': examination.pasien?.name || 'N/A',
+        'Email Pasien': examination.pasien?.email || 'N/A',
+        'Tanggal': new Date(examination.tanggal).toLocaleDateString(),
+        'Skor': examination.skor,
+        'Usia': examination.usia,
+        'Jenis Kelamin': formatJenisKelamin(examination.jenis_kelamin),
+        'Alamat': examination.alamat,
+        'Lama Sakit': examination.lama_sakit,
+      }));
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(exportData);
+
+      // Set column widths
+      const colWidths = [
+        { wch: 10 }, // ID
+        { wch: 20 }, // Nama Pasien
+        { wch: 25 }, // Email Pasien
+        { wch: 12 }, // Tanggal
+        { wch: 8 },  // Skor
+        { wch: 8 },  // Usia
+        { wch: 15 }, // Jenis Kelamin
+        { wch: 30 }, // Alamat
+        { wch: 20 }, // Lama Sakit
+      ];
+      ws['!cols'] = colWidths;
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, 'Examinations');
+
+      // Generate filename with current date
+      const today = new Date().toISOString().split('T')[0];
+      const filename = `examinations_${today}.xlsx`;
+
+      // Save file
+      XLSX.writeFile(wb, filename);
+      
+      toast.success('Examination data exported successfully!');
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      toast.error('Failed to export data');
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800';
@@ -172,10 +236,19 @@ export const ExaminationManagement: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900">Examination Management</h1>
           <p className="text-gray-600 mt-2">Manage patient examinations and medical records</p>
         </div>
-        <Button onClick={() => handleOpenModal()} className="mt-4 sm:mt-0">
-          <PlusIcon className="h-5 w-5 mr-2" />
-          Add Examination
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
+          <Button 
+            onClick={exportToExcel} 
+            className="flex items-center bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700"
+          >
+            <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
+            Export to Excel
+          </Button>
+          {/* <Button onClick={() => handleOpenModal()}>
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Add Examination
+          </Button> */}
+        </div>
       </div>
 
       {/* Filters */}
@@ -191,16 +264,7 @@ export const ExaminationManagement: React.FC = () => {
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="">All Status</option>
-            <option value="scheduled">Scheduled</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+          
         </div>
       </div>
 
@@ -210,28 +274,28 @@ export const ExaminationManagement: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Pasien
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Tanggal
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Skor
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Usia
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Jenis Kelamin
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden lg:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Alamat
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden xl:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Lama Sakit
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -239,28 +303,28 @@ export const ExaminationManagement: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedExaminations.map((examination) => (
                 <tr key={examination.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{examination.pasien?.name || 'N/A'}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{new Date(examination.tanggal).toLocaleDateString()}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{examination.skor}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{examination.usia}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{examination.jenis_kelamin}</div>
+                  <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{formatJenisKelamin(examination.jenis_kelamin)}</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="hidden lg:table-cell px-3 sm:px-6 py-4">
                     <div className="text-sm text-gray-900 max-w-xs truncate">{examination.alamat}</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="hidden xl:table-cell px-3 sm:px-6 py-4">
                     <div className="text-sm text-gray-900 max-w-xs truncate">{examination.lama_sakit}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
                       <button
                         onClick={() => handleOpenModal(examination)}
@@ -285,8 +349,8 @@ export const ExaminationManagement: React.FC = () => {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+              <div className="text-sm text-gray-700 text-center sm:text-left">
                 Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredExaminations.length)} of {filteredExaminations.length} results
               </div>
               <div className="flex space-x-2">
@@ -298,6 +362,9 @@ export const ExaminationManagement: React.FC = () => {
                 >
                   Previous
                 </Button>
+                <span className="flex items-center px-3 py-2 text-sm text-gray-700">
+                  Page {currentPage} of {totalPages}
+                </span>
                 <Button
                   variant="outline"
                   size="sm"

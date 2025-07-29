@@ -231,6 +231,7 @@ export const examinationService = {
         ...examinationData,
         id: Math.random().toString(36).substr(2, 9),
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       mockData.examinations.push(newExamination);
       return newExamination;
@@ -256,14 +257,19 @@ export const examinationService = {
       // Transform back to Examination type
       return {
         id: updatedExam.id.toString(),
-        patientId: updatedExam.pasien_id?.toString() || updatedExam.pasien?.id?.toString() || '',
-        patientName: updatedExam.pasien?.name || undefined,
-        staffId: '', // Not available in API response
-        staffName: undefined, // Not available in API response
-        date: updatedExam.tanggal,
-        notes: updatedExam.lama_sakit || '',
-        status: 'completed' as const,
+        tanggal: updatedExam.tanggal,
+        skor: updatedExam.skor,
+        usia: updatedExam.usia,
+        jenis_kelamin: updatedExam.jenis_kelamin,
+        alamat: updatedExam.alamat,
+        lama_sakit: updatedExam.lama_sakit,
         createdAt: updatedExam.createdAt,
+        updatedAt: updatedExam.updatedAt,
+        pasien: updatedExam.pasien ? {
+          id: updatedExam.pasien.id,
+          name: updatedExam.pasien.name,
+          email: updatedExam.pasien.email,
+        } : undefined,
       } as Examination;
     } catch (error) {
       console.error('Error updating examination:', error);
@@ -430,21 +436,103 @@ export const staffService = {
 
 export const dashboardService = {
   async getDashboardStats(): Promise<DashboardStats> {
-    await delay(500);
-    const users = mockData.users;
-    const examinations = mockData.examinations;
-    
-    const today = new Date().toISOString().split('T')[0];
-    const todayExaminations = examinations.filter(exam => exam.date === today);
-    
-    return {
-      totalUsers: users.length,
-      totalExaminations: examinations.length,
-      activeStaff: users.filter(u => u.role === 'staff').length,
-      todayExaminations: todayExaminations.length,
-      adminCount: users.filter(u => u.role === 'admin').length,
-      staffCount: users.filter(u => u.role === 'staff').length,
-      patientCount: users.filter(u => u.role === 'patient').length,
-    };
+    try {
+      const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const stats = await response.json();
+      return stats;
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+      // Fallback to mock data if API fails
+      await delay(500);
+      const users = mockData.users;
+      const examinations = mockData.examinations;
+      
+      const today = new Date().toISOString().split('T')[0];
+      const todayExaminations = examinations.filter(exam => exam.tanggal === today);
+      
+      return {
+        totalUsers: users.length,
+        totalExaminations: examinations.length,
+        activeStaff: users.filter(u => u.role === 'staff').length,
+        todayExaminations: todayExaminations.length,
+        adminCount: users.filter(u => u.role === 'admin').length,
+        staffCount: users.filter(u => u.role === 'staff').length,
+        patientCount: users.filter(u => u.role === 'patient').length,
+      };
+    }
+  },
+
+  // Fungsi untuk mendapatkan statistik dari data yang sudah ada
+  async getStatsFromExistingData(): Promise<DashboardStats> {
+    try {
+      // Ambil semua data yang diperlukan
+      const [users, examinations] = await Promise.all([
+        userService.getUsers(),
+        examinationService.getExaminations()
+      ]);
+
+      // Hitung statistik
+      const today = new Date().toISOString().split('T')[0];
+      const todayExaminations = examinations.filter(exam => exam.tanggal === today);
+      
+      return {
+        totalUsers: users.length,
+        totalExaminations: examinations.length,
+        activeStaff: users.filter(u => u.role === 'staff').length,
+        todayExaminations: todayExaminations.length,
+        adminCount: users.filter(u => u.role === 'admin').length,
+        staffCount: users.filter(u => u.role === 'staff').length,
+        patientCount: users.filter(u => u.role === 'patient').length,
+      };
+    } catch (error) {
+      console.error('Error calculating stats from existing data:', error);
+      throw error;
+    }
+  },
+
+  async getExaminationTrends(): Promise<Array<{ name: string; examinations: number }>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/dashboard/examination-trends`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching examination trends:', error);
+      // Fallback to mock data if API fails
+      await delay(500);
+      return [
+        { name: 'Jan', examinations: 65 },
+        { name: 'Feb', examinations: 59 },
+        { name: 'Mar', examinations: 80 },
+        { name: 'Apr', examinations: 81 },
+        { name: 'May', examinations: 56 },
+        { name: 'Jun', examinations: 55 },
+        { name: 'Jul', examinations: 40 },
+      ];
+    }
+  },
+
+  async getMonthlyStats(): Promise<Array<{ name: string; examinations: number; users: number }>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/dashboard/monthly-stats`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching monthly stats:', error);
+      // Fallback to mock data if API fails
+      await delay(500);
+      return [
+        { name: 'Week 1', examinations: 20, users: 5 },
+        { name: 'Week 2', examinations: 35, users: 8 },
+        { name: 'Week 3', examinations: 28, users: 12 },
+        { name: 'Week 4', examinations: 42, users: 15 },
+      ];
+    }
   },
 };

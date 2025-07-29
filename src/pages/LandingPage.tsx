@@ -62,8 +62,12 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">HM</span>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/src/image/no-bg.png" 
+                  alt="Shiyam Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="ml-3 text-xl font-semibold text-gray-900">Shiyam Manager</span>
             </div>
@@ -78,50 +82,50 @@ export const LandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-green-50 py-20">
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-green-50 py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
               Patient Examination
               <span className="block text-blue-600">Management System</span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
               Streamline patient data, staff management, and examination tracking with our comprehensive Shiyam management platform designed for modern medical facilities.
             </p>
             <Link
               to="/login"
-              className="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-md hover:bg-blue-700 transition-colors group"
+              className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 text-white text-base sm:text-lg font-medium rounded-md hover:bg-blue-700 transition-colors group"
             >
               Admin Login
-              <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRightIcon className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
           {/* Hero Image/Illustration */}
-          <div className="mt-16">
+          <div className="mt-12 sm:mt-16">
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-blue-50 rounded-lg p-6 text-center">
-                    <div className="w-12 h-12 bg-blue-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                      <UserGroupIcon className="h-6 w-6 text-white" />
+              <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="bg-blue-50 rounded-lg p-4 sm:p-6 text-center">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                      <UserGroupIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">User Management</h3>
-                    <p className="text-sm text-gray-600">Manage all system users</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">User Management</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">Manage all system users</p>
                   </div>
-                  <div className="bg-green-50 rounded-lg p-6 text-center">
-                    <div className="w-12 h-12 bg-green-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                      <ClipboardDocumentCheckIcon className="h-6 w-6 text-white" />
+                  <div className="bg-green-50 rounded-lg p-4 sm:p-6 text-center">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-lg mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                      <ClipboardDocumentCheckIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Examinations</h3>
-                    <p className="text-sm text-gray-600">Track patient examinations</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Examinations</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">Track patient examinations</p>
                   </div>
-                  <div className="bg-purple-50 rounded-lg p-6 text-center">
-                    <div className="w-12 h-12 bg-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                      <ChartBarIcon className="h-6 w-6 text-white" />
+                  <div className="bg-purple-50 rounded-lg p-4 sm:p-6 text-center">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-600 rounded-lg mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                      <ChartBarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Analytics</h3>
-                    <p className="text-sm text-gray-600">Real-time insights</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Analytics</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">Real-time insights</p>
                   </div>
                 </div>
               </div>
@@ -131,7 +135,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -154,10 +158,10 @@ export const LandingPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* How It Works Section */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -190,15 +194,19 @@ export const LandingPage: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-6">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">HM</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/src/image/no-bg.png" 
+                  alt="Shiyam Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="ml-3 text-xl font-semibold">Shiyam Manager</span>
             </div>
@@ -207,7 +215,15 @@ export const LandingPage: React.FC = () => {
             </p>
             <div className="border-t border-gray-800 pt-6">
               <p className="text-gray-500">
-                © 2024 Shiyam Manager. All rights reserved. | Built for Shiyam professionals
+                © 2025 Shiyam Manager. All rights reserved. | by{' '}
+                <a 
+                  href="https://www.instagram.com/dapz__/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+                >
+                  dapz__
+                </a>
               </p>
             </div>
           </div>

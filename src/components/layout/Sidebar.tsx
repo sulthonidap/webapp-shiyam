@@ -46,17 +46,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">HM</span>
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/src/image/no-bg.png" 
+                  alt="Shiyam Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
             </div>
-            <span className="ml-2 text-base font-semibold text-gray-900">Shiyam</span>
+            <span className="ml-2 text-sm sm:text-base font-semibold text-gray-900">Shiyam</span>
           </div>
           <button
             onClick={onToggle}
             className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
           >
-            <XMarkIcon className="h-6 w-6" />
+            <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
         </div>
 
