@@ -46,12 +46,12 @@ export const StaffManagement: React.FC = () => {
       staffService.assignPatientToStaff(staffId, patientId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['staff-patients'] });
-      toast.success('Patient assigned successfully');
+      toast.success('Pasien berhasil ditugaskan');
       setIsAssignModalOpen(false);
       setSelectedPatientId('');
     },
     onError: () => {
-      toast.error('Failed to assign patient');
+      toast.error('Gagal menugaskan pasien');
     },
   });
 
@@ -60,10 +60,10 @@ export const StaffManagement: React.FC = () => {
       staffService.removePatientFromStaff(staffId, patientId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['staff-patients'] });
-      toast.success('Patient removed successfully');
+      toast.success('Pasien berhasil dihapus');
     },
     onError: () => {
-      toast.error('Failed to remove patient');
+      toast.error('Gagal menghapus pasien');
     },
   });
 
@@ -84,7 +84,7 @@ export const StaffManagement: React.FC = () => {
 
   const handleAssignPatient = () => {
     if (!selectedStaffId || !selectedPatientId) {
-      toast.error('Please select both staff and patient');
+      toast.error('Mohon pilih staf dan pasien');
       return;
     }
 
@@ -97,7 +97,7 @@ export const StaffManagement: React.FC = () => {
   const handleRemovePatient = (patientId: string) => {
     if (!selectedStaffId) return;
 
-    if (window.confirm('Are you sure you want to remove this patient assignment?')) {
+    if (window.confirm('Apakah Anda yakin ingin menghapus penugasan pasien ini?')) {
       removePatientMutation.mutate({
         staffId: selectedStaffId,
         patientId,
@@ -112,13 +112,13 @@ export const StaffManagement: React.FC = () => {
   const exportStaffToExcel = () => {
     try {
       if (!selectedStaffId) {
-        toast.error('Please select a staff member first');
+        toast.error('Mohon pilih staf terlebih dahulu');
         return;
       }
 
       const selectedStaff = staff.find(s => s.id === selectedStaffId);
       if (!selectedStaff) {
-        toast.error('Staff member not found');
+        toast.error('Staf tidak ditemukan');
         return;
       }
 
@@ -202,7 +202,7 @@ export const StaffManagement: React.FC = () => {
       toast.success(`Data staff dan pasien berhasil diekspor!`);
     } catch (error) {
       console.error('Error exporting to Excel:', error);
-      toast.error('Failed to export data');
+      toast.error('Gagal mengekspor data');
     }
   };
 
@@ -218,8 +218,8 @@ export const StaffManagement: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Staff Management</h1>
-          <p className="text-gray-600 mt-2">Manage staff members and their patient assignments</p>
+          <h1 className="text-3xl font-bold text-gray-900">Manajemen Staf</h1>
+          <p className="text-gray-600 mt-2">Kelola staf dan penugasan pasien mereka</p>
         </div>
         <div className="mt-4 sm:mt-0">
           <Button 
@@ -227,7 +227,7 @@ export const StaffManagement: React.FC = () => {
             className="flex items-center bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700"
           >
             <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
-            Export to Excel
+            Ekspor ke Excel
           </Button>
         </div>
       </div>
@@ -236,12 +236,12 @@ export const StaffManagement: React.FC = () => {
         {/* Staff List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Staff Members</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Anggota Staf</h2>
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search staff..."
+                placeholder="Cari staf..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -266,7 +266,7 @@ export const StaffManagement: React.FC = () => {
                     Alamat
                   </th>
                   <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Role
+                    Peran
                   </th>
                 </tr>
               </thead>

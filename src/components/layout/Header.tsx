@@ -45,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                         active ? 'bg-gray-100' : ''
                       } block w-full text-left px-3 sm:px-4 py-2 text-sm text-gray-700`}
                     >
-                      Sign out
+                      Keluar
                     </button>
                   )}
                 </Menu.Item>

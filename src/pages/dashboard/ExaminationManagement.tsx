@@ -14,12 +14,12 @@ import { Modal } from '../../components/ui/Modal';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 
 const examinationSchema = z.object({
-  tanggal: z.string().min(1, 'Tanggal is required'),
-  skor: z.number().min(0, 'Skor must be positive'),
-  usia: z.number().min(0, 'Usia must be positive'),
-  jenis_kelamin: z.string().min(1, 'Jenis kelamin is required'),
-  alamat: z.string().min(1, 'Alamat is required'),
-  lama_sakit: z.string().min(1, 'Lama sakit is required'),
+  tanggal: z.string().min(1, 'Tanggal harus diisi'),
+  skor: z.number().min(0, 'Skor harus positif'),
+  usia: z.number().min(0, 'Usia harus positif'),
+  jenis_kelamin: z.string().min(1, 'Jenis kelamin harus diisi'),
+  alamat: z.string().min(1, 'Alamat harus diisi'),
+  lama_sakit: z.string().min(1, 'Lama sakit harus diisi'),
 });
 
 type ExaminationFormData = z.infer<typeof examinationSchema>;
@@ -53,12 +53,12 @@ export const ExaminationManagement: React.FC = () => {
     mutationFn: examinationService.createExamination,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['examinations'] });
-      toast.success('Examination created successfully');
+      toast.success('Ujian berhasil dibuat');
       setIsModalOpen(false);
       reset();
     },
     onError: () => {
-      toast.error('Failed to create examination');
+      toast.error('Gagal membuat ujian');
     },
   });
 
@@ -67,13 +67,13 @@ export const ExaminationManagement: React.FC = () => {
       examinationService.updateExamination(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['examinations'] });
-      toast.success('Examination updated successfully');
+      toast.success('Ujian berhasil diupdate');
       setIsModalOpen(false);
       setEditingExamination(null);
       reset();
     },
     onError: () => {
-      toast.error('Failed to update examination');
+      toast.error('Gagal mengupdate ujian');
     },
   });
 
@@ -81,10 +81,10 @@ export const ExaminationManagement: React.FC = () => {
     mutationFn: examinationService.deleteExamination,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['examinations'] });
-      toast.success('Examination deleted successfully');
+      toast.success('Ujian berhasil dihapus');
     },
     onError: () => {
-      toast.error('Failed to delete examination');
+      toast.error('Gagal menghapus ujian');
     },
   });
 
@@ -205,10 +205,10 @@ export const ExaminationManagement: React.FC = () => {
       // Save file
       XLSX.writeFile(wb, filename);
       
-      toast.success('Examination data exported successfully!');
+      toast.success('Data ujian berhasil diekspor!');
     } catch (error) {
       console.error('Error exporting to Excel:', error);
-      toast.error('Failed to export data');
+      toast.error('Gagal mengekspor data');
     }
   };
 
@@ -233,8 +233,8 @@ export const ExaminationManagement: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Examination Management</h1>
-          <p className="text-gray-600 mt-2">Manage patient examinations and medical records</p>
+          <h1 className="text-3xl font-bold text-gray-900">Daftar Pemeriksaan</h1>
+          <p className="text-gray-600 mt-2">Kelola ujian pasien dan rekam medis</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
           <Button 
@@ -242,7 +242,7 @@ export const ExaminationManagement: React.FC = () => {
             className="flex items-center bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700"
           >
             <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
-            Export to Excel
+            Ekspor ke Excel
           </Button>
           {/* <Button onClick={() => handleOpenModal()}>
             <PlusIcon className="h-5 w-5 mr-2" />
@@ -258,7 +258,7 @@ export const ExaminationManagement: React.FC = () => {
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search examinations..."
+              placeholder="Cari ujian..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"

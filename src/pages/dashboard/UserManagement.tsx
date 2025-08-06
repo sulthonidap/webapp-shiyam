@@ -14,8 +14,8 @@ import { Modal } from '../../components/ui/Modal';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 
 const userSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
+  name: z.string().min(1, 'Nama harus diisi'),
+  email: z.string().email('Format email tidak valid'),
   role: z.enum(['admin', 'staff', 'patient']),
   telephone: z.string().optional(),
   address: z.string().optional(),
@@ -42,12 +42,12 @@ export const UserManagement: React.FC = () => {
     mutationFn: userService.createUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('User created successfully');
+      toast.success('Pengguna berhasil dibuat');
       setIsModalOpen(false);
       reset();
     },
     onError: () => {
-      toast.error('Failed to create user');
+      toast.error('Gagal membuat pengguna');
     },
   });
 
@@ -56,13 +56,13 @@ export const UserManagement: React.FC = () => {
       userService.updateUser(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('User updated successfully');
+      toast.success('Pengguna berhasil diupdate');
       setIsModalOpen(false);
       setEditingUser(null);
       reset();
     },
     onError: () => {
-      toast.error('Failed to update user');
+      toast.error('Gagal mengupdate pengguna');
     },
   });
 
@@ -70,10 +70,10 @@ export const UserManagement: React.FC = () => {
     mutationFn: userService.deleteUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast.success('User deleted successfully');
+      toast.success('Pengguna berhasil dihapus');
     },
     onError: () => {
-      toast.error('Failed to delete user');
+      toast.error('Gagal menghapus pengguna');
     },
   });
 
@@ -141,8 +141,8 @@ export const UserManagement: React.FC = () => {
         'Nama': user.name,
         'Email': user.email,
         'Role': user.role === 'admin' ? 'Admin' : 
-                user.role === 'staff' ? 'Staff' : 
-                user.role === 'patient' ? 'Patient' : user.role,
+                user.role === 'staff' ? 'Staf' : 
+                user.role === 'patient' ? 'Pasien' : user.role,
         'Telepon': user.telephone || 'N/A',
         'Alamat': user.address || 'N/A',
         'Created At': new Date(user.createdAt).toLocaleString(),
@@ -174,10 +174,10 @@ export const UserManagement: React.FC = () => {
       // Save file
       XLSX.writeFile(wb, filename);
       
-      toast.success('User data exported successfully!');
+      toast.success('Data pengguna berhasil diekspor!');
     } catch (error) {
       console.error('Error exporting to Excel:', error);
-      toast.error('Failed to export data');
+      toast.error('Gagal mengekspor data');
     }
   };
 
@@ -187,6 +187,15 @@ export const UserManagement: React.FC = () => {
       case 'staff': return 'bg-blue-100 text-blue-800';
       case 'patient': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getRoleName = (role: string) => {
+    switch (role) {
+      case 'admin': return 'Admin';
+      case 'staff': return 'Staf';
+      case 'patient': return 'Pasien';
+      default: return role;
     }
   };
 
@@ -202,8 +211,8 @@ export const UserManagement: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600 mt-2">Manage all system users and their roles</p>
+          <h1 className="text-3xl font-bold text-gray-900">Manajemen Pengguna</h1>
+          <p className="text-gray-600 mt-2">Kelola semua pengguna sistem dan peran mereka</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
           <Button 
@@ -211,7 +220,7 @@ export const UserManagement: React.FC = () => {
             className="flex items-center bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700"
           >
             <ArrowDownTrayIcon className="h-5 w-5 mr-2" />
-            Export to Excel
+            Ekspor ke Excel
           </Button>
           {/* <Button onClick={() => handleOpenModal()}>
             <PlusIcon className="h-5 w-5 mr-2" />
@@ -227,7 +236,7 @@ export const UserManagement: React.FC = () => {
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search users..."
+              placeholder="Cari pengguna..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
@@ -238,10 +247,10 @@ export const UserManagement: React.FC = () => {
             onChange={(e) => setRoleFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="">All Roles</option>
+            <option value="">Semua Peran</option>
             <option value="admin">Admin</option>
-            <option value="staff">Staff</option>
-            <option value="patient">Patient</option>
+            <option value="staff">Staf</option>
+            <option value="patient">Pasien</option>
           </select>
         </div>
       </div>
@@ -253,19 +262,19 @@ export const UserManagement: React.FC = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  User
+                  Pengguna
                 </th>
                 <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
+                  Peran
                 </th>
                 <th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Contact
+                  Kontak
                 </th>
                 <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created
+                  Dibuat
                 </th>
                 <th className="px-3 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  Aksi
                 </th>
               </tr>
             </thead>
@@ -280,7 +289,7 @@ export const UserManagement: React.FC = () => {
                   </td>
                   <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
-                      {user.role}
+                      {getRoleName(user.role)}
                     </span>
                   </td>
                   <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -319,7 +328,7 @@ export const UserManagement: React.FC = () => {
           <div className="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
               <div className="text-sm text-gray-700 text-center sm:text-left">
-                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of {filteredUsers.length} results
+                Menampilkan {((currentPage - 1) * itemsPerPage) + 1} sampai {Math.min(currentPage * itemsPerPage, filteredUsers.length)} dari {filteredUsers.length} hasil
               </div>
               <div className="flex space-x-2">
                 <Button
@@ -328,10 +337,10 @@ export const UserManagement: React.FC = () => {
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
                 >
-                  Previous
+                  Sebelumnya
                 </Button>
                 <span className="flex items-center px-3 py-2 text-sm text-gray-700">
-                  Page {currentPage} of {totalPages}
+                  Halaman {currentPage} dari {totalPages}
                 </span>
                 <Button
                   variant="outline"
@@ -339,7 +348,7 @@ export const UserManagement: React.FC = () => {
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
                 >
-                  Next
+                  Selanjutnya
                 </Button>
               </div>
             </div>
@@ -351,13 +360,13 @@ export const UserManagement: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title={editingUser ? 'Edit User' : 'Add User'}
+        title={editingUser ? 'Edit Pengguna' : 'Tambah Pengguna'}
         size="md"
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name *
+              Nama *
             </label>
             <input
               type="text"
@@ -381,23 +390,23 @@ export const UserManagement: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Role *
+              Peran *
             </label>
             <select
               {...register('role')}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">Select role</option>
+              <option value="">Pilih peran</option>
               <option value="admin">Admin</option>
-              <option value="staff">Staff</option>
-              <option value="patient">Patient</option>
+              <option value="staff">Staf</option>
+              <option value="patient">Pasien</option>
             </select>
             {errors.role && <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Telephone
+              Telepon
             </label>
             <input
               type="tel"
@@ -408,7 +417,7 @@ export const UserManagement: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Address
+              Alamat
             </label>
             <textarea
               {...register('address')}
@@ -419,13 +428,13 @@ export const UserManagement: React.FC = () => {
 
           <div className="flex justify-end space-x-3 pt-4">
             <Button type="button" variant="outline" onClick={handleCloseModal}>
-              Cancel
+              Batal
             </Button>
             <Button 
               type="submit" 
               loading={createUserMutation.isPending || updateUserMutation.isPending}
             >
-              {editingUser ? 'Update' : 'Create'} User
+              {editingUser ? 'Update' : 'Buat'} Pengguna
             </Button>
           </div>
         </form>

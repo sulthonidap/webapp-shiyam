@@ -20,15 +20,15 @@ export const LoginPage: React.FC = () => {
     const newErrors: { email?: string; password?: string } = {};
     
     if (!email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email harus diisi';
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = 'Format email tidak valid';
     }
     
     if (!password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Password harus diisi';
     } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = 'Password minimal 6 karakter';
     }
     
     setErrors(newErrors);
@@ -45,17 +45,17 @@ export const LoginPage: React.FC = () => {
     try {
       const success = await login(email, password);
       if (success) {
-        toast.success('Login successful!');
+        toast.success('Login berhasil!');
         navigate('/dashboard');
       } else {
-        toast.error('Invalid credentials. Please try again.');
+        toast.error('Email atau password salah. Silakan coba lagi.');
         setErrors({ 
-          email: 'Invalid email or password',
-          password: 'Invalid email or password'
+          email: 'Email atau password salah',
+          password: 'Email atau password salah'
         });
       }
     } catch (error) {
-      toast.error('Login failed. Please try again.');
+      toast.error('Login gagal. Silakan coba lagi.');
     }
   };
 
@@ -71,10 +71,10 @@ export const LoginPage: React.FC = () => {
             />
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            Admin Login
+            Login Admin
           </h2>
           <p className="text-sm sm:text-base text-gray-600">
-            Sign in to access the Shiyam management system
+            Masuk untuk mengakses sistem manajemen Shiyam
           </p>
         </div>
 
@@ -82,7 +82,7 @@ export const LoginPage: React.FC = () => {
           <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                Alamat Email
               </label>
               <input
                 id="email"
@@ -94,7 +94,7 @@ export const LoginPage: React.FC = () => {
                 className={`appearance-none relative block w-full px-3 py-2 sm:py-3 border ${
                   errors.email ? 'border-red-300' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-sm sm:text-base`}
-                placeholder="Enter your email"
+                placeholder="Masukkan email Anda"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -103,7 +103,7 @@ export const LoginPage: React.FC = () => {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Kata Sandi
               </label>
               <input
                 id="password"
@@ -115,7 +115,7 @@ export const LoginPage: React.FC = () => {
                 className={`appearance-none relative block w-full px-3 py-2 sm:py-3 border ${
                   errors.password ? 'border-red-300' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 text-sm sm:text-base`}
-                placeholder="Enter your password"
+                placeholder="Masukkan kata sandi Anda"
               />
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
@@ -129,16 +129,16 @@ export const LoginPage: React.FC = () => {
                 size="lg"
                 loading={isLoading}
               >
-                Sign In
+                Masuk
               </Button>
             </div>
           </form>
 
           <div className="mt-6 p-3 sm:p-4 bg-blue-50 rounded-lg">
-            <h4 className="text-xs sm:text-sm font-medium text-blue-900 mb-2">Demo Credentials:</h4>
+            <h4 className="text-xs sm:text-sm font-medium text-blue-900 mb-2">Akun Demo:</h4>
             <p className="text-xs sm:text-sm text-blue-700">
               <strong>Email:</strong> admin@Shiyam.com<br />
-              <strong>Password:</strong> admin123
+              <strong>Kata Sandi:</strong> admin123
             </p>
           </div>
         </div>

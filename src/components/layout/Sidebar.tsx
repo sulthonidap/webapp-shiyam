@@ -17,9 +17,9 @@ interface SidebarProps {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-  { name: 'Daftar User', href: '/dashboard/users', icon: UsersIcon },
-  { name: 'Pemeriksaan', href: '/dashboard/examinations', icon: ClipboardDocumentListIcon },
-  { name: 'Staff Management', href: '/dashboard/staff', icon: UserGroupIcon },
+  { name: 'Manajemen Pengguna', href: '/dashboard/users', icon: UsersIcon },
+  { name: 'Daftar Pemeriksaan', href: '/dashboard/examinations', icon: ClipboardDocumentListIcon },
+  { name: 'Manajemen Staf', href: '/dashboard/staff', icon: UserGroupIcon },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {

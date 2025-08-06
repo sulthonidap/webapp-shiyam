@@ -159,9 +159,9 @@ export const DashboardOverview: React.FC = () => {
   };
 
   const userDistribution = [
-    { name: 'Patients', value: stats.patientCount, color: '#3B82F6' },
-    { name: 'Staff', value: stats.staffCount, color: '#10B981' },
-    { name: 'Admins', value: stats.adminCount, color: '#F59E0B' },
+    { name: 'Pasien', value: stats.patientCount, color: '#3B82F6' },
+    { name: 'Staf', value: stats.staffCount, color: '#10B981' },
+    { name: 'Admin', value: stats.adminCount, color: '#F59E0B' },
   ];
 
   const examinationTrends = generateExaminationTrends();
@@ -173,7 +173,7 @@ export const DashboardOverview: React.FC = () => {
 
   const statCards = [
     {
-      title: 'Total Users',
+      title: 'Total Pengguna',
       value: stats.totalUsers,
       icon: UsersIcon,
       color: 'bg-blue-500',
@@ -181,7 +181,7 @@ export const DashboardOverview: React.FC = () => {
       changeType: 'increase'
     },
     {
-      title: 'Total Examinations',
+      title: 'Total Ujian',
       value: stats.totalExaminations,
       icon: ClipboardDocumentCheckIcon,
       color: 'bg-green-500',
@@ -189,7 +189,7 @@ export const DashboardOverview: React.FC = () => {
       changeType: 'increase'
     },
     {
-      title: 'Active Staff',
+      title: 'Staf Aktif',
       value: stats.activeStaff,
       icon: UserGroupIcon,
       color: 'bg-purple-500',
@@ -197,7 +197,7 @@ export const DashboardOverview: React.FC = () => {
       changeType: 'increase'
     },
     {
-      title: 'Today\'s Examinations',
+      title: 'Ujian Hari Ini',
       value: stats.todayExaminations,
       icon: CalendarDaysIcon,
       color: 'bg-orange-500',
@@ -216,8 +216,8 @@ export const DashboardOverview: React.FC = () => {
       )}
       
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-2">Welcome to your Shiyam management dashboard</p>
+        <h1 className="text-3xl font-bold text-gray-900">Ringkasan Dashboard</h1>
+        <p className="text-gray-600 mt-2">Selamat datang di dashboard manajemen Shiyam</p>
       </div>
 
       {/* Stats Cards */}
@@ -249,7 +249,7 @@ export const DashboardOverview: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Examination Trends */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Examination Trends (7 Days)</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Tren Ujian (7 Hari)</h3>
           <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <LineChart data={examinationTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -275,7 +275,7 @@ export const DashboardOverview: React.FC = () => {
 
         {/* User Distribution */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">User Distribution</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Distribusi Pengguna</h3>
           <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <PieChart>
               <Pie
@@ -300,7 +300,7 @@ export const DashboardOverview: React.FC = () => {
 
         {/* Monthly Statistics */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 lg:col-span-2">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Weekly Statistics (4 Weeks)</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Statistik Mingguan (4 Minggu)</h3>
           <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
             <BarChart data={monthlyStats}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -313,8 +313,8 @@ export const DashboardOverview: React.FC = () => {
                   borderRadius: '8px'
                 }} 
               />
-              <Bar dataKey="examinations" fill="#3B82F6" name="Examinations" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="users" fill="#10B981" name="New Users" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="examinations" fill="#3B82F6" name="Ujian" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="users" fill="#10B981" name="Pengguna Baru" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

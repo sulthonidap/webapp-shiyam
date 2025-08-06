@@ -12,46 +12,46 @@ export const LandingPage: React.FC = () => {
   const features = [
     {
       icon: UserGroupIcon,
-      title: 'User Management',
-      description: 'Comprehensive admin, staff, and patient account management with role-based access control.'
+      title: 'Manajemen Pengguna',
+      description: 'Manajemen akun admin, staf, dan pasien yang komprehensif dengan kontrol akses berbasis peran.'
     },
     {
       icon: ClipboardDocumentCheckIcon,
-      title: 'Examination Tracking',
-      description: 'Complete patient examination history with detailed notes and status tracking.'
+      title: 'Pelacakan Pemeriksaan',
+      description: 'Riwayat pemeriksaan pasien lengkap dengan catatan detail dan pelacakan status.'
     },
     {
       icon: UserGroupIcon,
-      title: 'Staff Assignment',
-      description: 'Efficiently assign patients to specific staff members for optimized care delivery.'
+      title: 'Penugasan Staf',
+      description: 'Menugaskan pasien kepada staf tertentu secara efisien untuk pengiriman perawatan yang optimal.'
     },
     {
       icon: ChartBarIcon,
-      title: 'Real-time Dashboard',
-      description: 'Live monitoring and analytics with comprehensive insights and reporting.'
+      title: 'Dashboard Real-time',
+      description: 'Pemantauan langsung dan analitik dengan wawasan dan pelaporan yang komprehensif.'
     }
   ];
 
   const steps = [
     {
       number: '01',
-      title: 'Admin creates staff and patient accounts',
-      description: 'System administrators can easily create and manage user accounts for Shiyam staff and patients.'
+      title: 'Admin membuat akun staf dan pasien',
+      description: 'Administrator sistem dapat dengan mudah membuat dan mengelola akun pengguna untuk staf dan pasien Shiyam.'
     },
     {
       number: '02',
-      title: 'Staff are assigned to specific patients',
-      description: 'Shiyam staff members are assigned to patients based on specialization and availability.'
+      title: 'Staf ditugaskan kepada pasien tertentu',
+      description: 'Anggota staf Shiyam ditugaskan kepada pasien berdasarkan spesialisasi dan ketersediaan.'
     },
     {
       number: '03',
-      title: 'Staff input patient examination data',
-      description: 'Medical staff can record detailed examination notes, vital signs, and treatment information.'
+      title: 'Staf memasukkan data pemeriksaan pasien',
+      description: 'Staf medis dapat mencatat catatan pemeriksaan detail, tanda vital, dan informasi perawatan.'
     },
     {
       number: '04',
-      title: 'Admin monitors all data through dashboard',
-      description: 'Real-time monitoring and analytics provide comprehensive oversight of all Shiyam activities.'
+      title: 'Admin memantau semua data melalui dashboard',
+      description: 'Pemantauan real-time dan analitik memberikan pengawasan komprehensif terhadap semua aktivitas Shiyam.'
     }
   ];
 
@@ -65,7 +65,7 @@ export const LandingPage: React.FC = () => {
               <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
                 <img 
                   src="/no-bg.png" 
-                  alt="Shiyam Logo" 
+                  alt="Logo Shiyam" 
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -75,7 +75,7 @@ export const LandingPage: React.FC = () => {
               to="/login"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
-              Admin Login
+              Login Admin
             </Link>
           </div>
         </div>
@@ -86,17 +86,17 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Patient Examination
-              <span className="block text-blue-600">Management System</span>
+              Sistem Manajemen
+              <span className="block text-blue-600">Pemeriksaan Pasien</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-              Streamline patient data, staff management, and examination tracking with our comprehensive Shiyam management platform designed for modern medical facilities.
+              Sederhanakan data pasien, manajemen staf, dan pelacakan pemeriksaan dengan platform manajemen Shiyam komprehensif yang dirancang untuk fasilitas medis modern.
             </p>
             <Link
               to="/login"
               className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 text-white text-base sm:text-lg font-medium rounded-md hover:bg-blue-700 transition-colors group"
             >
-              Admin Login
+              Login Admin
               <ArrowRightIcon className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -110,22 +110,22 @@ export const LandingPage: React.FC = () => {
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg mx-auto mb-3 sm:mb-4 flex items-center justify-center">
                       <UserGroupIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">User Management</h3>
-                    <p className="text-xs sm:text-sm text-gray-600">Manage all system users</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Manajemen Pengguna</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">Kelola semua pengguna sistem</p>
                   </div>
                   <div className="bg-green-50 rounded-lg p-4 sm:p-6 text-center">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-lg mx-auto mb-3 sm:mb-4 flex items-center justify-center">
                       <ClipboardDocumentCheckIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Examinations</h3>
-                    <p className="text-xs sm:text-sm text-gray-600">Track patient examinations</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Pemeriksaan</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">Lacak pemeriksaan pasien</p>
                   </div>
                   <div className="bg-purple-50 rounded-lg p-4 sm:p-6 text-center">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-600 rounded-lg mx-auto mb-3 sm:mb-4 flex items-center justify-center">
                       <ChartBarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Analytics</h3>
-                    <p className="text-xs sm:text-sm text-gray-600">Real-time insights</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Analitik</h3>
+                    <p className="text-xs sm:text-sm text-gray-600">Wawasan real-time</p>
                   </div>
                 </div>
               </div>
@@ -139,10 +139,10 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Comprehensive Shiyam Management
+              Manajemen Shiyam Komprehensif
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our platform provides all the tools you need to efficiently manage Shiyam operations
+              Platform kami menyediakan semua alat yang Anda butuhkan untuk mengelola operasi Shiyam secara efisien
             </p>
           </div>
 
@@ -165,10 +165,10 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              How It Works
+              Cara Kerja
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Simple workflow designed for Shiyam professionals
+              Alur kerja sederhana yang dirancang untuk profesional Shiyam
             </p>
           </div>
 
@@ -204,18 +204,18 @@ export const LandingPage: React.FC = () => {
             <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
                 <img 
                   src="/no-bg.png" 
-                  alt="Shiyam Logo" 
+                  alt="Logo Shiyam" 
                   className="w-full h-full object-contain"
                 />
               </div>
               <span className="ml-3 text-xl font-semibold">Shiyam Manager</span>
             </div>
             <p className="text-gray-400 mb-6">
-              Professional Shiyam management system for modern medical facilities
+              Sistem manajemen Shiyam profesional untuk fasilitas medis modern
             </p>
             <div className="border-t border-gray-800 pt-6">
               <p className="text-gray-500">
-                © 2025 Shiyam Manager. All rights reserved. | by{' '}
+                © 2025 Shiyam Manager. Semua hak dilindungi. | oleh{' '}
                 <a 
                   href="https://www.instagram.com/dapz__/" 
                   target="_blank" 
