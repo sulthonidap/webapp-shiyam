@@ -87,11 +87,11 @@ export const LandingPage: React.FC = () => {
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
               Sistem Manajemen
-              <span className="block text-blue-600">Pemeriksaan Pasien</span>
+              <span className="block text-blue-600">Aplikasi Shiyam</span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
+            {/* <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
               Sederhanakan data pasien, manajemen staf, dan pelacakan pemeriksaan dengan platform manajemen Shiyam komprehensif yang dirancang untuk fasilitas medis modern.
-            </p>
+            </p> */}
             <Link
               to="/login"
               className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 text-white text-base sm:text-lg font-medium rounded-md hover:bg-blue-700 transition-colors group"
