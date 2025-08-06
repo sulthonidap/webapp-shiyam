@@ -5,7 +5,7 @@ import { mockData } from './client';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // API Base URL
-const API_BASE_URL = 'https://103.13.206.9.sslip.io/api';
+const API_BASE_URL = 'https://api-shiyam.giescare.com/api';
 
 export const userService = {
   async getUsers(role?: string): Promise<User[]> {
