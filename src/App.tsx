@@ -10,6 +10,7 @@ import { DashboardLayout } from './components/layout/DashboardLayout';
 // Pages
 import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { DashboardOverview } from './pages/dashboard/DashboardOverview';
 import { UserManagement } from './pages/dashboard/UserManagement';
 import { ExaminationManagement } from './pages/dashboard/ExaminationManagement';
@@ -34,6 +35,7 @@ function App() {
               {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               
               {/* Protected Dashboard Routes */}
               <Route path="/dashboard" element={

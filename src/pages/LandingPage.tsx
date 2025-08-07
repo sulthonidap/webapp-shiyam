@@ -213,6 +213,14 @@ export const LandingPage: React.FC = () => {
             <p className="text-gray-400 mb-6">
               Sistem manajemen Shiyam profesional untuk fasilitas medis modern
             </p>
+            <div className="flex justify-center space-x-6 mb-6">
+              <Link
+                to="/privacy-policy"
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Kebijakan Privasi
+              </Link>
+            </div>
             <div className="border-t border-gray-800 pt-6">
               <p className="text-gray-500">
                 © 2025 Shiyam Manager. Semua hak dilindungi. | oleh{' '}
